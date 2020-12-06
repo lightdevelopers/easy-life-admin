@@ -132,12 +132,22 @@ const Addproductcontent = (props) => {
                                             </div>
                                         </div>
 
+                                        {foodItemsName.map((val,index) => {
+                                               return <div className="col-md-12 mb-3" style={{backgroundColor: "#E7E7E7",alignItems: "center", display: "flex",flexDirection: "row", justifyContent: "space-between", padding: 10}}>
+                                               <p>{val}</p>
+                                               <i class="fa fa-trash" aria-hidden="true" onClick={() => {
+                                                   foodItemsName.splice(index,1);
+                                                   setFoodItemsName([...foodItemsName]);
+                                               }}></i>
+                                               </div>
+                                           })}
+
                                         <div className="col-md-12 mb-3">
                                             <div className="input-group">
                                                 <button onClick={(e) => {
                                                     e.preventDefault();
                                                     foodItemsName.push(foodItem);
-                                                    setFoodItemsName([...foodItem]);
+                                                    setFoodItemsName([...foodItemsName]);
                                                     setFoodItem("");
                                                 }} className="btn btn-primary">Add</button>
                                             </div>
