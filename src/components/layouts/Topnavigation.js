@@ -73,7 +73,7 @@ class Topnavigation extends Component {
                                 <div className="dropdown-divider" />
                                 <Scrollbar className="ms-scrollable ms-dropdown-list">
                                     <Link className="media p-2" to="#">
-                                        <div className="media-body"> <span>3 din me apna tanazal moota krein</span>
+                                        <div className="media-body"> <span>New Notifications</span>
                                             <p className="fs-10 my-1 text-disabled"><i className="material-icons">access_time</i> 30 seconds ago</p>
                                         </div>
                                     </Link>

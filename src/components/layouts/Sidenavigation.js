@@ -83,10 +83,23 @@ class Sidenavigation extends Component {
                             <Link to="#" className="has-chevron"> <span><i className="fas fa-file-invoice fs-16" />Foods </span>
                             </Link>
                             <ul id="invoice" className="collapse" aria-labelledby="invoice" data-parent="#side-nav-accordion">
-                                <li> <Link to="/invoice-detail" >Foods List</Link>
+                                <li> <Link to="/foodlist" >Foods List</Link>
                                 </li>
-                                <li> <Link to="/invoice-list" >Add Food</Link>
+                                <li> <Link to="/addfood" >Add Food</Link>
                                 </li>
+                            </ul >
+                        </li >
+
+                        <li className="menu-item">
+                            <Link to="#" className="has-chevron"> <span><i className="fa fa-archive fs-16" />Deals </span>
+                            </Link>
+                            <ul id="product" className="collapse" aria-labelledby="product" data-parent="#side-nav-accordion">
+                                <li> <Link to="/deallist" >Deals List</Link>
+                                </li>
+                                <li> <Link to="/adddeal" >Add Deal</Link>
+                                </li >
+                                {/*<li> <Link to="/product-detail" >Product Detail</Link>
+                                </li >*/}
                             </ul >
                         </li >
                         <li className="menu-item">

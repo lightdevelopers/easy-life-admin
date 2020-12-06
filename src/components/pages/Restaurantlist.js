@@ -3,8 +3,7 @@ import Sidenavigation from '../layouts/Sidenavigation';
 import Topnavigation from '../layouts/Topnavigation';
 import Restaurentcontent from '../sections/Restaurant-list/Restaurantcontent'
 import Quickbar from '../layouts/Quickbar';
-
-const  Restaurantlist = () => {
+const  Restaurantlist = (props) => {
         return (
             <div className="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
                 <Sidenavigation />

@@ -126,69 +126,35 @@ const Content = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const [restaurants,setRestaurants] = useState(null);
-
-    const fetchRestaurants = async () => {
-        const restaurants = await fetch(api("/get_restaurant"),{
+    const [foods,setFoods] = useState(null);
+    
+    const fetchFoods = async () => {
+        const foods = await fetch(api("/get_deal"),{
             method: "GET",
-            headers: headers,
+            headers: headers
         });
-        const list = await restaurants.json();
-        setRestaurants(list);
+        const list = await foods.json();
+        console.log(list);
+        setFoods(list);
     }
 
-    const deleteRestaurants = async (id) => {
-        const response = await fetch(api("/delete_restaurant"), {
+    const deleteFoodItem = async (id) => {
+        const response = await fetch(api("/delete_deal"), {
             method: "DELETE",
             headers: headers,
-            body: JSON.stringify({
-                id:id
-            })
+            body: id
         });
+        console.log(response);
         if(!response.ok) {
             throw new Error("Something went wrong");
         }
     }
 
-    const changeStatus = async (status,id) => {
-        console.log("Fetching");
-        let response;
-        if(status == "open") {
-            response = await fetch(api("/open_restaurant"), {
-                method: "POST",
-                headers: headers,
-                body: id
-            });
-        } else {
-            response = await fetch(api("/close_restaurant"), {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify({
-                    restaurantId: id,
-                    closeReason: "CLOSED"
-                })
-            });
-        }
-      
-        console.log("Resonse",response);
-        if(!response.ok) {
-            alert("Something went wrong!")
-        }
-
-    }
 
     useEffect(() => {
-        fetchRestaurants();
-    }, [])
-
-    console.log(restaurants)
-    const addstars = (e) => {
-        var elem = e.target,
-            parentTask = elem.closest('.ms-rating-item');
-        $(parentTask).prevAll().removeClass('rated');
-        $(parentTask).addClass('rated');
-        $(parentTask).nextAll().addClass('rated');
-    }
+        fetchFoods();
+    }, []);
+    console.log(foods);
    
     return (
             <div className="ms-content-wrapper">
@@ -239,41 +205,41 @@ const Content = (props) => {
                             <div className="col-xl-12">
                                 <div className="ms-panel">
                                     <div className="ms-panel-header">
-                                        <h6>Rstaurants List</h6>
+                                        <h6>Deals List</h6>
                                     </div>
                                     <div className="ms-panel-body">
                                         <div className="table-responsive">
                                             <table className="table table-hover thead-primary">
                                                 <thead>
                                                     <tr>
+                                                        <th scope="col">Deal Name</th>
                                                         <th scope="col">Restaurant ID</th>
-                                                        <th scope="col">Restaurant Name</th>
-                                                        <th scope="col">Location</th>
-                                                        <th scope="col">Timings</th>
-                                                        <th scope="col">Charges</th>
-                                                        <th scope="col">Phone</th>
-                                                        <th scope="col">Status</th>
+                                                        <th scope="col">Price</th>
+                                                        <th scope="col">Discount</th>
+                                                        <th scope="col">FoodItems</th>
+                                                        <th scope="col">Available</th>
                                                         <th scope="col">Edit</th>
-                                                        <th scope="col">Status</th>
                                                         <th scope="col">Delete</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {restaurants && restaurants.map((item, i) => (
+                                                    {foods && foods.map((item, i) => (
                                                         <tr key={i}>
-                                                            <th scope="row">{item.id}</th>
-                                                            <td>{item.name}</td>
-                                                            <td>{item.address}</td>
-                                                            <td>{item.openingTime} - {item.closingTime}</td>
-                                                            <td>{item.deliveryCharges.toFixed(2)}.Rs</td>
-                                                            <td>{item.phoneNumber}</td>
-                                                            <td>{item.isClose ? "Closed" : "Open"}</td>
-                                                           
-                                                            <td><Link to="#"><i className="fas fa-pencil-alt text-secondary" /></Link>
-                                                                </td>
-                                                    <td onClick={e => changeStatus(item.isClose ? "open" : "close",item.id)}><Link to="#"><i  className="fas fa-paper-plane text-secondary text-success" />{item.isClose ? "Open" : "Close"}</Link>
-                                                                </td>
-                                                                <td><Link to="#"><i onClick={e => deleteRestaurants(item.id)} className="far fa-trash-alt ms-text-danger" /></Link></td>
+                                                            <td>{item.dealName}</td>
+                                                            <td>{item.restaurantId}</td>
+                                                            <td>{item.price.toFixed(2)}</td>
+                                                            <td>{item.discount}</td>
+                                                            
+                                                            <td><div>
+                                                                {item.foodItemsNames.map((food, index) => <p>{food}</p>)}
+                                                                </div></td>
+                                                            <td>{item.isAvailable ? "Available": "Out of stock"}</td>
+                                                            
+                                                            <td>
+                                                                <Link to="#"><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                            </td>
+                                                    
+                                                                <td><Link to="#"><i onClick={e => deleteFoodItem(item.id)} className="far fa-trash-alt ms-text-danger" /></Link></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>

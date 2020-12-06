@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider } from 'react-redux'
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-
+import store from './redux/store';
 // Css
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './assets/vendors/iconic-fonts/font-awesome/css/all.min.css';
@@ -14,9 +15,11 @@ import './assets/css/animate.min.css';
 import './assets/css/style.css';
 
 ReactDOM.render(
+  <Provider store={store}>
   <BrowserRouter>
     <App />
-  </BrowserRouter>,
+  </BrowserRouter>
+  </Provider>,
   document.getElementById('costic')
 );
 

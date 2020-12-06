@@ -1,6 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux'
-import store from './redux/store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Preloader from './components/layouts/Preloader';
 import Dashboard from './components/pages/Dashboard';
@@ -69,15 +67,21 @@ import Portfolio from './components/pages/Portfolio';
 import Stockmanagement from './components/pages/Stockmanagement';
 import Userprofile from './components/pages/Userprofile';
 import Webanalytics from './components/pages/Webanalytics';
-
+import AddFood from './components/pages/AddFood';
+import FoodList from './components/pages/FoodList';
+import AddDeal from './components/pages/AddDeal';
+import DealList from './components/pages/DealsList'
 
 function App() {
   return (
-    <Provider store={store}>
     <Router>
       <Preloader/>
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/addfood" component={AddFood} />
+        <Route exact path="/foodlist" component={FoodList} />
+        <Route exact path="/adddeal" component={AddDeal} />
+        <Route exact path="/deallist" component={DealList} />
         <Route path="/accordions" component={Accordions} />
         <Route path="/add-product" component={Addproduct} />
         <Route path="/alerts" component={Alerts} />
@@ -145,7 +149,6 @@ function App() {
         <Route path="/web-analytics" component={Webanalytics} />
       </Switch>
     </Router>
-    </Provider>
   );
 }
 
