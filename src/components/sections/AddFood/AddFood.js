@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import Breadcrumb from './Breadcrumb';
 import api, { headers } from '../../../api';
 import { useEffect } from 'react';
-
+import firebase from 'firebase';
+import Loader from 'react-spinners/CircleLoader'
 const Addproductcontent = (props) => {
 
     const [success, setSuccess] = useState(false);
+    const [imageLoading, setImageLoading] = useState(false);
     const [ids, setIds] = useState([]);
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
-    const [image, setImage] = useState("dd");
+    const [image, setImage] = useState(null);
     const [restaurantId, setRestaurantId] = useState("");
     const [flavors, setFlavors] = useState([]);
     const [flavor, setFlavor] = useState("")
+    const [flavorDescription, setFlavorDescription] = useState("");
     const [flavorPrice, setFlavorPrice] = useState(0)
     const [sizes, setSizes] = useState([]);
     const [sizesPrice, setSizesPrice] = useState(0);
     const [size, setSize] = useState("");
     const [category, setCategory] = useState("");
     const [available, setAvailable] = useState(true);
+
+    const [opening, setOpening] = useState("");
+    const [closing, setClosing] = useState("");
 
     const addFood = async (e) => {
         e.preventDefault();
@@ -36,10 +42,12 @@ const Addproductcontent = (props) => {
                 price: price,
                 imageUri: image,
                 restaurantId: restaurantId,
-                flavours: flavors,
+                variants: flavors,
                 sizes: sizes,
                 category: category,
-                isAvailable: available 
+                isAvailable: available ,
+                closingTime: closing,
+                openingTime: opening
             })
         });
 
@@ -120,7 +128,7 @@ const Addproductcontent = (props) => {
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="validationCustom25">Flavor</label>
                                             <div className="input-group">
-                                                <input value={flavor} onChange={e => setFlavor(e.target.value)} type="text" className="form-control" id="validationCustom25" placeholder="10" required />
+                                                <input value={flavor} onChange={e => setFlavor(e.target.value)} type="text" className="form-control" id="validationCustom25" placeholder="Flavor Name" required />
                                                 <div className="invalid-feedback">
                                                     Price
                   </div>
@@ -128,9 +136,19 @@ const Addproductcontent = (props) => {
                                         </div>
 
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="validationCustom25">Extra Price</label>
+                                            <label htmlFor="validationCustom25">Additional Price</label>
                                             <div className="input-group">
                                                 <input value={flavorPrice} onChange={e => setFlavorPrice(e.target.value)} type="number" className="form-control" id="validationCustom25" placeholder="10" required />
+                                                <div className="invalid-feedback">
+                                                    Price
+                  </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-12 mb-3">
+                                            <label htmlFor="validationCustom25">Flavor Decription</label>
+                                            <div className="input-group">
+                                                <input value={flavorDescription} onChange={e => setFlavorDescription(e.target.value)} type="text" className="form-control" id="validationCustom25" placeholder="Flavor Description" required />
                                                 <div className="invalid-feedback">
                                                     Price
                   </div>
@@ -139,7 +157,7 @@ const Addproductcontent = (props) => {
                                         
                                            {flavors.map((val,index) => {
                                                return <div className="col-md-12 mb-3" style={{backgroundColor: "#E7E7E7",alignItems: "center", display: "flex",flexDirection: "row", justifyContent: "space-between", padding: 10}}>
-                                               <p>{val}</p>
+                                               <p>{val.title}, {val.additionalPrice} -> {val.description}</p>
                                                <i class="fa fa-trash" aria-hidden="true" onClick={() => {
                                                    flavors.splice(index,1);
                                                    setFlavors([...flavors]);
@@ -152,10 +170,15 @@ const Addproductcontent = (props) => {
                                             <div className="input-group">
                                                 <button onClick={(e) => {
                                                     e.preventDefault();
-                                                    flavors.push(flavor + ", " + flavorPrice);
+                                                    flavors.push({
+                                                        title: flavor,
+                                                        description: flavorDescription,
+                                                        additionalPrice: flavorPrice
+                                                    });
                                                     setFlavors([...flavors]);
                                                     setFlavor("");
                                                     setFlavorPrice(0);
+                                                    setFlavorDescription("");
                                                 }} className="btn btn-primary">Add</button>
                                             </div>
                                         </div>
@@ -163,7 +186,7 @@ const Addproductcontent = (props) => {
                                         <div className="col-md-6 mb-3">
                                             <label htmlFor="validationCustom25">Size</label>
                                             <div className="input-group">
-                                                <input value={size} onChange={e => setSize(e.target.value)} type="text" className="form-control" id="validationCustom25" placeholder="10" required />
+                                                <input value={size} onChange={e => setSize(e.target.value)} type="text" className="form-control" id="validationCustom25" placeholder="Size..." required />
                                                 <div className="invalid-feedback">
                                                     Price
                   </div>
@@ -171,7 +194,7 @@ const Addproductcontent = (props) => {
                                         </div>
 
                                         <div className="col-md-6 mb-3">
-                                            <label htmlFor="validationCustom25">Extra Price</label>
+                                            <label htmlFor="validationCustom25">Additional Price</label>
                                             <div className="input-group">
                                                 <input value={sizesPrice} onChange={e => setSizesPrice(e.target.value)} type="number" className="form-control" id="validationCustom25" placeholder="10" required />
                                                 <div className="invalid-feedback">
@@ -182,7 +205,7 @@ const Addproductcontent = (props) => {
 
                                         {sizes.map((val,index) => {
                                                return <div className="col-md-12 mb-3" style={{backgroundColor: "#E7E7E7",alignItems: "center", display: "flex",flexDirection: "row", justifyContent: "space-between", padding: 10}}>
-                                               <p>{val}</p>
+                                               <p>{val.title}, {val.additionalPrice}</p>
                                                <i class="fa fa-trash" aria-hidden="true" onClick={() => {
                                                    sizes.splice(index,1);
                                                    setSizes([...sizes]);
@@ -194,7 +217,10 @@ const Addproductcontent = (props) => {
                                             <div className="input-group">
                                                 <button onClick={(e) => {
                                                     e.preventDefault();
-                                                    sizes.push(size + ", " + sizesPrice);
+                                                    sizes.push({
+                                                        title: size,
+                                                        additionalPrice: sizesPrice
+                                                    });
                                                     setSizes([...sizes]);
                                                     setSize("");
                                                     setSizesPrice(0);
@@ -221,9 +247,39 @@ const Addproductcontent = (props) => {
                                     <div className="col-md-12 mb-3">
                                             <label htmlFor="validationCustom12">Product Image</label>
                                             <div className="custom-file">
-                                                <input type="file" className="custom-file-input" id="validatedCustomFile" />
+                                                <input onChange={e => {
+                                                    setImageLoading(true)
+                                                    firebase.storage().ref("/foods").child(new Date().toString()).put(e.target.files[0]).then(res => {
+                                                        res.ref.getDownloadURL().then(url => {
+                                                            setImage(url);
+                                                            setImageLoading(false);
+                                                        })
+                                                    });
+                                                }} type="file" className="custom-file-input" id="validatedCustomFile" />
                                                 <label className="custom-file-label" htmlFor="validatedCustomFile">Upload Images...</label>
                                                 <div className="invalid-feedback">Example invalid custom file feedback</div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            {imageLoading && <Loader />}
+                                        {image && <img style={{width: "100%", maxHeight: 300}} src={image}/>}
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                        <label htmlFor="validationCustom18">Opening Time</label>
+                                            <div className="input-group">
+                                                <input value={opening} onChange={e => setOpening(e.target.value)} type="time" className="form-control" id="validationCustom18" placeholder="xx:yy am/pm"  required />
+                                                <div className="valid-feedback">
+                                                    Looks good!
+                  </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                        <label htmlFor="validationCustom18">Closing Time</label>
+                                            <div className="input-group">
+                                                <input value={closing} onChange={e => setClosing(e.target.value)} type="time" className="form-control" id="validationCustom18" placeholder="xx:yy am/pm" required />
+                                                <div className="valid-feedback">
+                                                    Looks good!
+                  </div>
                                             </div>
                                         </div>
                                         <div className="col-md-12 mb-3">

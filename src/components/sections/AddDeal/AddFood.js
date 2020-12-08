@@ -10,11 +10,14 @@ const Addproductcontent = (props) => {
     const [dealName, setDealName] = useState("");
     const [price, setPrice] = useState(0);
     const [discount, setDiscount] = useState(0);
-    const [image, setImage] = useState("sd");
+    const [image, setImage] = useState("sadasd");
     const [foodItemsName, setFoodItemsName] = useState([]);
     const [foodItem, setFoodItem] = useState("");
     const [restaurantId, setRestaurantId] = useState("");
     const [available, setAvailable] = useState(true);
+
+    const [opening, setOpening] = useState("");
+    const [closing, setClosing] = useState("");
 
     const addFood = async (e) => {
         e.preventDefault();
@@ -34,7 +37,9 @@ const Addproductcontent = (props) => {
                 imageURI: image,
                 foodItemsNames: foodItemsName,
                 restaurantId: restaurantId,
-                isAvailable: available
+                isAvailable: available,
+                closingTime: closing,
+                openingTime: opening
             })
         });
 
@@ -171,10 +176,29 @@ const Addproductcontent = (props) => {
                                     <div className="form-row">
                                     <div className="col-md-12 mb-3">
                                             <label htmlFor="validationCustom12">Product Image</label>
+                                            
                                             <div className="custom-file">
                                                 <input type="file" className="custom-file-input" id="validatedCustomFile" />
                                                 <label className="custom-file-label" htmlFor="validatedCustomFile">Upload Images...</label>
                                                 <div className="invalid-feedback">Example invalid custom file feedback</div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                        <label htmlFor="validationCustom18">Opening Time</label>
+                                            <div className="input-group">
+                                                <input value={opening} onChange={e => setOpening(e.target.value)} type="time" className="form-control" id="validationCustom18" placeholder="xx:yy am/pm"  required />
+                                                <div className="valid-feedback">
+                                                    Looks good!
+                  </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                        <label htmlFor="validationCustom18">Closing Time</label>
+                                            <div className="input-group">
+                                                <input value={closing} onChange={e => setClosing(e.target.value)} type="time" className="form-control" id="validationCustom18" placeholder="xx:yy am/pm" required />
+                                                <div className="valid-feedback">
+                                                    Looks good!
+                  </div>
                                             </div>
                                         </div>
                                         </div>

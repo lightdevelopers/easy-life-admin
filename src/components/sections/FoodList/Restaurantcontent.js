@@ -8,6 +8,8 @@ import tpfdimg1 from '../../../assets/img/costic/pizza.jpg';
 import tpfdimg2 from '../../../assets/img/costic/french-fries.jpg';
 import tpfdimg3 from '../../../assets/img/costic/cereals.jpg';
 import tpfdimg4 from '../../../assets/img/costic/egg-sandwich.jpg';
+import LoadingOverlay from 'react-loading-overlay'
+import Loader from 'react-spinners/RiseLoader'
 
 const topfoodmenutable = [
     {
@@ -129,12 +131,15 @@ const Content = (props) => {
     const [foods,setFoods] = useState(null);
 
     const fetchFoods = async () => {
+        setLoading(true);
         const foods = await fetch(api("/get_food_items"),{
             method: "GET",
             headers: headers,
         });
         const list = await foods.json();
+        console.log(list);
         setFoods(list);
+        setLoading(false);
     }
 
     const deleteFoodItem = async (id) => {
@@ -149,32 +154,7 @@ const Content = (props) => {
         }
     }
 
-    const changeStatus = async (status,id) => {
-        console.log("Fetching");
-        let response;
-        if(status == "open") {
-            response = await fetch(api("/open_restaurant"), {
-                method: "POST",
-                headers: headers,
-                body: id
-            });
-        } else {
-            response = await fetch(api("/close_restaurant"), {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify({
-                    restaurantId: id,
-                    closeReason: "CLOSED"
-                })
-            });
-        }
-      
-        console.log("Resonse",response);
-        if(!response.ok) {
-            alert("Something went wrong!")
-        }
-
-    }
+    
 
     useEffect(() => {
         fetchFoods();
@@ -189,6 +169,8 @@ const Content = (props) => {
     }
    
     return (
+        <>
+       
             <div className="ms-content-wrapper">
                 <div className="row">
                     <div className="col-md-12">
@@ -234,10 +216,11 @@ const Content = (props) => {
                                     </div>
                                 </div>
                             </div>
+                            
                             <div className="col-xl-12">
                                 <div className="ms-panel">
                                     <div className="ms-panel-header">
-                                        <h6>Rstaurants List</h6>
+                                        <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>{loading && <Loader color={"pink"} size={20}/>}<h6 style={{marginLeft: 10}}>{loading ? "Loading..." : "Foods List"}</h6></div>
                                     </div>
                                     <div className="ms-panel-body">
                                         <div className="table-responsive">
@@ -255,6 +238,7 @@ const Content = (props) => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    
                                                     {foods && foods.map((item, i) => (
                                                         <tr key={i}>
                                                             <td>{item.name}</td>
@@ -285,6 +269,7 @@ const Content = (props) => {
                     </div>
                 </div>
             </div>
+            </>
 
         );
 }

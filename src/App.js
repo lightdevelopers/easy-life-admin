@@ -71,8 +71,18 @@ import AddFood from './components/pages/AddFood';
 import FoodList from './components/pages/FoodList';
 import AddDeal from './components/pages/AddDeal';
 import DealList from './components/pages/DealsList'
-
+import firebase from 'firebase';
 function App() {
+  firebase.initializeApp({
+    apiKey: "AIzaSyBzsWvTWfg0CRgO3tJ-QNfSr1lC6Pnr4xw",
+    authDomain: "easy-life-86aa9.firebaseapp.com",
+    databaseURL: "https://easy-life-86aa9.firebaseio.com",
+    projectId: "easy-life-86aa9",
+    storageBucket: "easy-life-86aa9.appspot.com",
+    messagingSenderId: "47400393413",
+    appId: "1:47400393413:web:5174257c08d49a500e2eac",
+    measurementId: "G-BWMT5F203Q"
+  });
   return (
     <Router>
       <Preloader/>

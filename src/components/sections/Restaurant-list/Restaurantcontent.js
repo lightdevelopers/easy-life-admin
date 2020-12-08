@@ -8,7 +8,7 @@ import tpfdimg1 from '../../../assets/img/costic/pizza.jpg';
 import tpfdimg2 from '../../../assets/img/costic/french-fries.jpg';
 import tpfdimg3 from '../../../assets/img/costic/cereals.jpg';
 import tpfdimg4 from '../../../assets/img/costic/egg-sandwich.jpg';
-
+import Loader from 'react-spinners/RiseLoader'
 const topfoodmenutable = [
     {
         photo: tpfdimg1,
@@ -239,7 +239,7 @@ const Content = (props) => {
                             <div className="col-xl-12">
                                 <div className="ms-panel">
                                     <div className="ms-panel-header">
-                                        <h6>Rstaurants List</h6>
+                                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>{loading && <Loader color={"pink"} size={20}/>}<h6 style={{marginLeft: 10}}>{loading ? "Loading..." : "Rstaurants List"}</h6></div>
                                     </div>
                                     <div className="ms-panel-body">
                                         <div className="table-responsive">
