@@ -1,29 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Breadcrumb from './Breadcrumb';
 import api, { headers } from '../../../api';
 
 import firebase from 'firebase';
 import Loader from 'react-spinners/CircleLoader'
-const Addproductcontent = (props) => {
-
+const Addproductcontent = ({restaurnt}) => {
+    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [imageLoading, setImageLoading] = useState(false);
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [image, setImage] = useState(null);
-    const [opening, setOpening] = useState("");
-    const [closing, setClosing] = useState("");
-    const [delivery, setDelivery] = useState(0);
-    const [phone, setPhone] = useState("");
-    const [share, setShare] = useState(0);
-    const [isClose, setIsClose] = useState(false);
-    const [reson, setReason] = useState("");
+    const [name, setName] = useState(restaurnt ? restaurnt.name : "");
+    const [address, setAddress] = useState(restaurnt ? restaurnt.address : "");
+    const [image, setImage] = useState(restaurnt ? restaurnt.restaurantImage :  null);
+    const [opening, setOpening] = useState(restaurnt ? restaurnt.openingTime : "");
+    const [closing, setClosing] = useState(restaurnt ? restaurnt.closingTime : "");
+    const [delivery, setDelivery] = useState(restaurnt ? restaurnt.deliveryCharges :  0);
+    const [phone, setPhone] = useState(restaurnt ? restaurnt.phoneNumber :  "");
+    const [share, setShare] = useState(restaurnt ? restaurnt.sharePercentage  : 0);
+    const [isClose, setIsClose] = useState(restaurnt ? restaurnt.isClose :  false);
+    const [reson, setReason] = useState(restaurnt? restaurnt.closeReason :  "");
 
     const [password, setPassword] = useState("");
 
     const addRestaurant = async (e) => {
         e.preventDefault();
-        console.log("INSERTING.....")
+        setLoading(true);
+        if(restaurnt) {
+            const response = await fetch(api(`/edit_restaurant`),{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    restaurantId: restaurnt.id,
+                    newName: name,
+                    newAddress: address,
+                    newOpeningTime: opening,
+                    newClosingTime: closing,
+                    newDeliveryCharges: delivery,
+                    newPhoneNumber: phone,
+                    newSharePercentage: share,
+                })
+            });
+    
+            if(response.ok) {
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                }, 3000)
+            }
+            setLoading(false);
+            return;
+        }
         setSuccess(false);
         const response = await fetch(api(`/add_restaurant?password=${password}`),{
             method: "POST",
@@ -53,8 +81,12 @@ const Addproductcontent = (props) => {
             }, 3000)
         }
 
+        setLoading(false);
+
         
     }
+
+    
         return (
             <div className="ms-content-wrapper">
                 <div className="row">
@@ -211,7 +243,7 @@ const Addproductcontent = (props) => {
                                     
                                     
                                     <div className="ms-panel-header new">
-                                        <button onClick={addRestaurant} className="btn btn-secondary d-block" type="submit">Save</button>
+                                        <button onClick={addRestaurant} className="btn btn-secondary d-block" type="submit">{loading ? "Please Wait..." : "Save"}</button>
                                         <button className="btn btn-primary d-block" type="submit">Save and Add</button>
                                     </div>
                                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Preloader from './components/layouts/Preloader';
 import Dashboard from './components/pages/Dashboard';
 import Accordions from './components/pages/Accordions';

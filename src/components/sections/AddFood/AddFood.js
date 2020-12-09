@@ -4,31 +4,73 @@ import api, { headers } from '../../../api';
 import { useEffect } from 'react';
 import firebase from 'firebase';
 import Loader from 'react-spinners/CircleLoader'
-const Addproductcontent = (props) => {
-
+function create_UUID(){
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+const Addproductcontent = ({food}) => {
+    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [imageLoading, setImageLoading] = useState(false);
     const [ids, setIds] = useState([]);
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState(0);
-    const [image, setImage] = useState(null);
-    const [restaurantId, setRestaurantId] = useState("");
-    const [flavors, setFlavors] = useState([]);
+    const [name, setName] = useState(food ? food.name : "");
+    const [price, setPrice] = useState(food ? food.originalPrice  :0);
+    const [discountPrice, setDiscountPrice] = useState(food ? food.discountPrice : 0);
+    const [image, setImage] = useState(food ? food.imageUri : null);
+    const [restaurantId, setRestaurantId] = useState(food ? food.restaurantId : "");
+    const [flavors, setFlavors] = useState(food ? food.variants : []);
     const [flavor, setFlavor] = useState("")
     const [flavorDescription, setFlavorDescription] = useState("");
     const [flavorPrice, setFlavorPrice] = useState(0)
-    const [sizes, setSizes] = useState([]);
+    const [sizes, setSizes] = useState(food ? food.sizes  :[]);
     const [sizesPrice, setSizesPrice] = useState(0);
     const [size, setSize] = useState("");
-    const [category, setCategory] = useState("");
-    const [available, setAvailable] = useState(true);
-
-    const [opening, setOpening] = useState("");
-    const [closing, setClosing] = useState("");
-
+    const [category, setCategory] = useState(food ? food.category : "");
+    const [available, setAvailable] = useState(food ? food.isAvailable : true);
+    const [deliveryTime, setDeliveryTime] = useState(food ? food.deliveryTime : 0);
+    const [opening, setOpening] = useState(food ? food.openingTime : "");
+    const [closing, setClosing] = useState(food ? food.closingTime : "");
     const addFood = async (e) => {
         e.preventDefault();
-        console.log("INSERTING.....")
+        setLoading(true);
+        if(food) {
+            
+            const response = await fetch(api("/edit_food_items"),{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    foodItemId: food.id,
+                    newName: name,
+                    newOriginalPrice: price,
+                    newDiscountPrice: discountPrice,
+                    newImageURI: image,
+                    restaurantId: restaurantId,
+                    newVariants: flavors,
+                    newSizes: sizes,
+                    newCategory: category,
+                    isAvailable: available ,
+                    newClosingTime: closing,
+                    newOpeningTime: opening
+                })
+            });
+    
+            if(response.ok) {
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                }, 3000)
+            }   
+            setLoading(false);
+            return;
+        }
         setSuccess(false);
         const response = await fetch(api("/add_food_item"),{
             method: "POST",
@@ -37,9 +79,10 @@ const Addproductcontent = (props) => {
                 "Accept-Type": "application/json"
             },
             body: JSON.stringify({
-                id: new Date().toString(),
+                id: "food_"+create_UUID(),
                 name: name,
-                price: price,
+                originalPrice: price,
+                discountedPrice: discountPrice,
                 imageUri: image,
                 restaurantId: restaurantId,
                 variants: flavors,
@@ -47,7 +90,9 @@ const Addproductcontent = (props) => {
                 category: category,
                 isAvailable: available ,
                 closingTime: closing,
-                openingTime: opening
+                openingTime: opening,
+                rating: 5.0,
+                deliveryTime: deliveryTime
             })
         });
 
@@ -56,11 +101,14 @@ const Addproductcontent = (props) => {
             setTimeout(() => {
                 setSuccess(false);
             }, 3000)
-        }   
+        }
+        setLoading(false);   
     }
 
     useEffect(() => {
        (async () => {
+
+        
         const response = await fetch(api("/get_restaurant", {
             method: "GET",
             headers: headers,
@@ -74,6 +122,8 @@ const Addproductcontent = (props) => {
         setIds([...ids])
        })();
     } , [])
+
+
         return (
             <div className="ms-content-wrapper">
                 <div className="row">
@@ -95,7 +145,7 @@ const Addproductcontent = (props) => {
                                     <div className="col-md-12 mb-3">
                                     <label htmlFor="validationCustom23">Restaurant ID</label>
                                             <div className="input-group">
-                                                <select onChange={e => setRestaurantId(e.target.options[e.target.selectedIndex].value)} value={restaurantId} className="form-control" id="validationCustom23" required>
+                                                <select disabled={food ? true :false} onChange={e => setRestaurantId(e.target.options[e.target.selectedIndex].value)} value={restaurantId} className="form-control" id="validationCustom23" required>
                                                     <option>Select Restaurant ID</option>
                                                     {ids && ids.map((id,index) => <option value={id} key={id}>{id}</option>)}
                                                 </select>
@@ -116,9 +166,19 @@ const Addproductcontent = (props) => {
                                        
                                        
                                         <div className="col-md-12 mb-3">
-                                            <label htmlFor="validationCustom25">Price</label>
+                                            <label htmlFor="validationCustom25">Original Price</label>
                                             <div className="input-group">
                                                 <input value={price} onChange={e => setPrice(e.target.value)} type="number" className="form-control" id="validationCustom25" placeholder="10" required />
+                                                <div className="invalid-feedback">
+                                                    Price
+                  </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-12 mb-3">
+                                            <label htmlFor="validationCustom25">Discounted Price</label>
+                                            <div className="input-group">
+                                                <input value={discountPrice} onChange={e => setDiscountPrice(e.target.value)} type="number" className="form-control" id="validationCustom25" placeholder="10" required />
                                                 <div className="invalid-feedback">
                                                     Price
                   </div>
@@ -284,6 +344,16 @@ const Addproductcontent = (props) => {
                   </div>
                                             </div>
                                         </div>
+
+                                        <div className="col-md-6 mb-3">
+                                        <label htmlFor="validationCustom18">Delivery Time</label>
+                                            <div className="input-group">
+                                                <input value={deliveryTime} onChange={e => setDeliveryTime(e.target.value)} type="number" className="form-control" id="validationCustom18" placeholder="xx:yy am/pm" required />
+                                                <div className="valid-feedback">
+                                                    Looks good!
+                  </div>
+                                            </div>
+                                        </div>
                                         <div className="col-md-12 mb-3">
                                             <label htmlFor="validationCustom18">Category</label>
                                             <div className="input-group">
@@ -310,7 +380,7 @@ const Addproductcontent = (props) => {
                                     
                                     
                                     <div className="ms-panel-header new">
-                                        <button onClick={addFood} className="btn btn-secondary d-block" type="submit">Save</button>
+                                        <button onClick={addFood} className="btn btn-secondary d-block" type="submit">{loading ? "Please Wait..." : "Save"}</button>
                                         <button className="btn btn-primary d-block" type="submit">Save and Add</button>
                                     </div>
                                 </div>

@@ -8,7 +8,7 @@ import tpfdimg1 from '../../../assets/img/costic/pizza.jpg';
 import tpfdimg2 from '../../../assets/img/costic/french-fries.jpg';
 import tpfdimg3 from '../../../assets/img/costic/cereals.jpg';
 import tpfdimg4 from '../../../assets/img/costic/egg-sandwich.jpg';
-
+import Loader from 'react-spinners/RiseLoader'
 const topfoodmenutable = [
     {
         photo: tpfdimg1,
@@ -129,6 +129,7 @@ const Content = (props) => {
     const [foods,setFoods] = useState(null);
     
     const fetchFoods = async () => {
+        setLoading(true);
         const foods = await fetch(api("/get_deal"),{
             method: "GET",
             headers: headers
@@ -136,18 +137,27 @@ const Content = (props) => {
         const list = await foods.json();
         console.log(list);
         setFoods(list);
+        setLoading(false);
     }
 
     const deleteFoodItem = async (id) => {
+        setLoading(true);
         const response = await fetch(api("/delete_deal"), {
             method: "DELETE",
             headers: headers,
             body: id
         });
         console.log(response);
-        if(!response.ok) {
-            throw new Error("Something went wrong");
+        if(response.ok) {
+            for(let i=0; i<foods.length; i++) {
+                if(foods[i].id == id) {
+                    foods.splice(i,1);
+                    setFoods([...foods]);
+                    break;
+                }
+            }
         }
+        setLoading(false);
     }
 
 
@@ -205,7 +215,7 @@ const Content = (props) => {
                             <div className="col-xl-12">
                                 <div className="ms-panel">
                                     <div className="ms-panel-header">
-                                        <h6>Deals List</h6>
+                                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>{loading && <Loader color={"pink"} size={20}/>}<h6 style={{marginLeft: 10}}>{loading ? "Loading..." : "Deals List"}</h6></div>
                                     </div>
                                     <div className="ms-panel-body">
                                         <div className="table-responsive">
@@ -236,7 +246,7 @@ const Content = (props) => {
                                                             <td>{item.isAvailable ? "Available": "Out of stock"}</td>
                                                             
                                                             <td>
-                                                                <Link to="#"><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                                <Link to={`/adddeal?id=${item.id}`}><i className="fas fa-pencil-alt text-secondary" /></Link>
                                                             </td>
                                                     
                                                                 <td><Link to="#"><i onClick={e => deleteFoodItem(item.id)} className="far fa-trash-alt ms-text-danger" /></Link></td>

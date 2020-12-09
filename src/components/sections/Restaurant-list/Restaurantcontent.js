@@ -129,29 +129,35 @@ const Content = (props) => {
     const [restaurants,setRestaurants] = useState(null);
 
     const fetchRestaurants = async () => {
+        setLoading(true);
         const restaurants = await fetch(api("/get_restaurant"),{
             method: "GET",
             headers: headers,
         });
         const list = await restaurants.json();
         setRestaurants(list);
+        setLoading(false);
     }
 
     const deleteRestaurants = async (id) => {
+        setLoading(true);
         const response = await fetch(api("/delete_restaurant"), {
             method: "DELETE",
             headers: headers,
-            body: JSON.stringify({
-                id:id
-            })
+            body: (id)
         });
+        for(let i=0; i<restaurants.length; i++) {
+         
+            
+        }
+        setLoading(false);
         if(!response.ok) {
             throw new Error("Something went wrong");
         }
     }
 
     const changeStatus = async (status,id) => {
-        console.log("Fetching");
+        setLoading(true)
         let response;
         if(status == "open") {
             response = await fetch(api("/open_restaurant"), {
@@ -169,8 +175,14 @@ const Content = (props) => {
                 })
             });
         }
-      
-        console.log("Resonse",response);
+        for(let i=0; i<restaurants.length; i++) {
+            if(restaurants[i].id == id) {
+                restaurants[i].isClose = status == "open" ? false : true
+                setRestaurants([...restaurants]);
+                break;
+            }
+        }
+        setLoading(false);
         if(!response.ok) {
             alert("Something went wrong!")
         }
@@ -269,7 +281,7 @@ const Content = (props) => {
                                                             <td>{item.phoneNumber}</td>
                                                             <td>{item.isClose ? "Closed" : "Open"}</td>
                                                            
-                                                            <td><Link to="#"><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                            <td><Link to={`/add-product?id=${item.id}`}><i className="fas fa-pencil-alt text-secondary" /></Link>
                                                                 </td>
                                                     <td onClick={e => changeStatus(item.isClose ? "open" : "close",item.id)}><Link to="#"><i  className="fas fa-paper-plane text-secondary text-success" />{item.isClose ? "Open" : "Close"}</Link>
                                                                 </td>

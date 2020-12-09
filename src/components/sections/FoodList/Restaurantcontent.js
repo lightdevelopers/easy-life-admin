@@ -136,6 +136,7 @@ const Content = (props) => {
             method: "GET",
             headers: headers,
         });
+        console.log(foods);
         const list = await foods.json();
         console.log(list);
         setFoods(list);
@@ -143,14 +144,22 @@ const Content = (props) => {
     }
 
     const deleteFoodItem = async (id) => {
+        setLoading(true);
         const response = await fetch(api("/delete_food_item"), {
             method: "DELETE",
             headers: headers,
             body: id
         });
         console.log(response);
-        if(!response.ok) {
-            throw new Error("Something went wrong");
+        setLoading(false);
+        if(response.ok) {
+            for(let i=0; i<foods.length; i++) {
+                if(foods[i].id == id) {
+                    foods.splice(i,1);
+                    setFoods([...foods]);
+                    break;
+                }
+            }
         }
     }
 
@@ -159,15 +168,7 @@ const Content = (props) => {
     useEffect(() => {
         fetchFoods();
     }, []);
-    console.log(foods);
-    const addstars = (e) => {
-        var elem = e.target,
-            parentTask = elem.closest('.ms-rating-item');
-        $(parentTask).prevAll().removeClass('rated');
-        $(parentTask).addClass('rated');
-        $(parentTask).nextAll().addClass('rated');
-    }
-   
+
     return (
         <>
        
@@ -243,17 +244,17 @@ const Content = (props) => {
                                                         <tr key={i}>
                                                             <td>{item.name}</td>
                                                             <td>{item.restaurantId}</td>
-                                                            <td>{item.price.toFixed(2)}</td>
+                                                            <td>{item.price}</td>
                                                             <td><div>
-                                                                {item.sizes.map((size, index) => <p>{size}</p>)}
+                                                                {item.sizes.map((size, index) => <p>{size.title}</p>)}
                                                                 </div></td>
                                                             <td><div>
-                                                                {item.flavours.map((flavor, index) => <p>{flavor}</p>)}
+                                                                {item.variants.map((flavor, index) => <p>{flavor.title}</p>)}
                                                                 </div></td>
                                                             <td>{item.isAvailable ? "Available": "Out of stock"}</td>
                                                             
                                                             <td>
-                                                                <Link to="#"><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                                <Link to={`/addfood?id=${item.id}`}><i className="fas fa-pencil-alt text-secondary" /></Link>
                                                             </td>
                                                     
                                                                 <td><Link to="#"><i onClick={e => deleteFoodItem(item.id)} className="far fa-trash-alt ms-text-danger" /></Link></td>
