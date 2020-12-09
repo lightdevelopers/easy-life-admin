@@ -32,7 +32,7 @@ const Addproductcontent = (props) => {
                 "Accept-Type": "application/json",
             },
             body: JSON.stringify({
-                id: name.replace(/\s/g, '').toLocaleUpperCase(),
+                id: name.replace(/\s/g, '').toLowerCase(),
                 name: name,
                 address: address,
                 restaurantImage: image,
