@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Breadcrumb from './Breadcrumb';
 import api, { headers } from '../../../api';
 import { useEffect } from 'react';
-
+import firebase from 'firebase';
+import Loader from 'react-spinners/CircleLoader'
 const Addproductcontent = (props) => {
 
     const [success, setSuccess] = useState(false);
@@ -10,11 +11,13 @@ const Addproductcontent = (props) => {
     const [dealName, setDealName] = useState("");
     const [price, setPrice] = useState(0);
     const [discount, setDiscount] = useState(0);
-    const [image, setImage] = useState("sadasd");
+    const [image, setImage] = useState(null);
     const [foodItemsName, setFoodItemsName] = useState([]);
     const [foodItem, setFoodItem] = useState("");
     const [restaurantId, setRestaurantId] = useState("");
     const [available, setAvailable] = useState(true);
+
+    const [imageLoading, setImageLoading] = useState(false);
 
     const [opening, setOpening] = useState("");
     const [closing, setClosing] = useState("");
@@ -178,10 +181,25 @@ const Addproductcontent = (props) => {
                                             <label htmlFor="validationCustom12">Product Image</label>
                                             
                                             <div className="custom-file">
-                                                <input type="file" className="custom-file-input" id="validatedCustomFile" />
+                                                <input onChange={e => {
+                                                    if(!e.target.files[0])
+                                                    return;
+                                                     setImageLoading(true)
+                                                     firebase.storage().ref("/foods").child(new Date().toString()).put(e.target.files[0]).then(res => {
+                                                         res.ref.getDownloadURL().then(url => {
+                                                             setImage(url);
+                                                             setImageLoading(false);
+                                                         })
+                                                     });
+                                                }} type="file" accept="image/x-png,image/gif,image/jpeg"  className="custom-file-input" id="validatedCustomFile" />
                                                 <label className="custom-file-label" htmlFor="validatedCustomFile">Upload Images...</label>
                                                 <div className="invalid-feedback">Example invalid custom file feedback</div>
                                             </div>
+                                        </div>
+
+                                        <div className="col-md-12 mb-3">
+                                        {imageLoading && <Loader />}
+                                        {image && <img style={{width: "100%", maxHeight: 300}} src={image}/>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                         <label htmlFor="validationCustom18">Opening Time</label>

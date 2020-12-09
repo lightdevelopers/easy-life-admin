@@ -248,6 +248,8 @@ const Addproductcontent = (props) => {
                                             <label htmlFor="validationCustom12">Product Image</label>
                                             <div className="custom-file">
                                                 <input onChange={e => {
+                                                    if(!e.target.files[0])
+                                                    return;
                                                     setImageLoading(true)
                                                     firebase.storage().ref("/foods").child(new Date().toString()).put(e.target.files[0]).then(res => {
                                                         res.ref.getDownloadURL().then(url => {
@@ -255,7 +257,7 @@ const Addproductcontent = (props) => {
                                                             setImageLoading(false);
                                                         })
                                                     });
-                                                }} type="file" className="custom-file-input" id="validatedCustomFile" />
+                                                }} type="file" accept="image/x-png,image/gif,image/jpeg"  className="custom-file-input" id="validatedCustomFile" />
                                                 <label className="custom-file-label" htmlFor="validatedCustomFile">Upload Images...</label>
                                                 <div className="invalid-feedback">Example invalid custom file feedback</div>
                                             </div>
