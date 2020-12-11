@@ -103,6 +103,14 @@ class Sidenavigation extends Component {
                             </ul >
                         </li >
                         <li className="menu-item">
+                            <Link to="/riders"> <span><i className="fas fa-clipboard-list fs-16" />Riders</span>
+                            </Link>
+                        </li >
+                        <li className="menu-item">
+                            <Link to="/flashcard"> <span><i className="fas fa-clipboard-list fs-16" />Flash Card</span>
+                            </Link>
+                        </li >
+                        <li className="menu-item">
                             <Link to="/orders"> <span><i className="fas fa-clipboard-list fs-16" />Orders</span>
                             </Link>
                         </li >

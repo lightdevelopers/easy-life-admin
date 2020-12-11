@@ -71,6 +71,8 @@ import AddFood from './components/pages/AddFood';
 import FoodList from './components/pages/FoodList';
 import AddDeal from './components/pages/AddDeal';
 import DealList from './components/pages/DealsList'
+import Riders from './components/pages/Riders';
+import FlashCard from './components/pages/FlashCard';
 import firebase from 'firebase';
 function App() {
   firebase.initializeApp({
@@ -88,6 +90,8 @@ function App() {
       <Preloader/>
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/flashcard" component={FlashCard} />
+        <Route exact path="/riders" component={Riders} />
         <Route exact path="/addfood" component={AddFood} />
         <Route exact path="/foodlist" component={FoodList} />
         <Route exact path="/adddeal" component={AddDeal} />
