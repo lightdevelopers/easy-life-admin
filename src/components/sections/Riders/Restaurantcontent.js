@@ -135,11 +135,13 @@ const Content = (props) => {
 
     const [foods,setFoods] = useState(null);
     
-    const [id, setID] = useState(editable ? editable.id : null);
+    const [id, setID] = useState(editable ? editable.riderId : null);
     const [riderDisplayName, setRiderDisplayName] = useState(editable ? editable.riderDisplayName : "");
-    const [riderPassword, setRiderPassword] = useState(editable ? editable : "");
+    const [riderPassword, setRiderPassword] = useState(editable ? editable.password : "");
     const [riderPhoto, setRiderPhoto] = useState(editable ? editable.riderPhoto : "");
     const [phoneNumber, setPhoneNumber] = useState(editable ? editable.phoneNumber :  "");
+
+    console.log(foods);
 
     const fetchFoods = async () => {
         setLoading(true);
@@ -202,17 +204,18 @@ const Content = (props) => {
         setLoading(false);
     }
 
-    const deleteFoodItem = async (id) => {
+    const deleteFoodItem = async (val) => {
+        console.log("Food",val);
         setLoading(true);
         const response = await fetch(api("/delete_rider"), {
             method: "DELETE",
             headers: headers,
-            body: id
+            body: (val)
         });
         setLoading(false);
         if(response.ok) {
             for(let i=0; i<foods.length; i++) {
-                if(foods[i].id == id) {
+                if(foods[i].id == val) {
                     foods.splice(i,1);
                     setFoods([...foods]);
                     break;
@@ -345,16 +348,15 @@ const Content = (props) => {
                                                 <tbody>
                                                     
                                                     {foods && foods.map((item, i) => (
-                                                        <tr key={item.riderId}>
-                                                            <td>{item.riderDisplayName}</td>
+                                                        <tr key={item.i}>
+                                                            <td>{item.riderId}</td>
+                                                            <td>{item.displayName}</td>
                                                             <td>{item.phoneNumber}</td>
-                                                            
-                                                            
                                                             <td>
-                                                                <Link onClick={e => setEditable(item.id)}><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                                <Link onClick={e => setEditable(item)}><i className="fas fa-pencil-alt text-secondary" /></Link>
                                                             </td>
                                                     
-                                                                <td><Link to="#"><i onClick={e => deleteFoodItem(item.id)} className="far fa-trash-alt ms-text-danger" /></Link></td>
+                                                                <td><Link to="#"><i onClick={e => deleteFoodItem(item.riderId)} className="far fa-trash-alt ms-text-danger" /></Link></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>

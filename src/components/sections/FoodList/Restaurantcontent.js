@@ -231,7 +231,7 @@ const Content = (props) => {
                                                         <th scope="col">Food Name</th>
                                                         <th scope="col">Restaurant ID</th>
                                                         <th scope="col">Price</th>
-                                                        <th scope="col">Flavors</th>
+                                                        <th scope="col">Sizes</th>
                                                         <th scope="col">Flavors</th>
                                                         <th scope="col">Available</th>
                                                         <th scope="col">Edit</th>
@@ -246,10 +246,10 @@ const Content = (props) => {
                                                             <td>{item.restaurantId}</td>
                                                             <td>{item.price}</td>
                                                             <td><div>
-                                                                {item.sizes.map((size, index) => <p>{size.title}</p>)}
+                                                                {item.sizes.map((size, index) => <p>{size.title}, {size.additionalPrice}</p>)}
                                                                 </div></td>
                                                             <td><div>
-                                                                {item.variants.map((flavor, index) => <p>{flavor.title}</p>)}
+                                                                {item.variants.map((flavor, index) => <p>{flavor.title}, {flavor.additionalPrice}</p>)}
                                                                 </div></td>
                                                             <td>{item.isAvailable ? "Available": "Out of stock"}</td>
                                                             
