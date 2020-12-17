@@ -86,7 +86,7 @@ const Addproductcontent = ({deal}) => {
             body: JSON.stringify({
                 id: "deal_" + create_UUID(),
                 dealName: dealName,
-                imageURI: image,
+                photo: image,
                 foodItemsNames: foodItemsName,
                 restaurantId: restaurantId,
                 isAvailable: available,

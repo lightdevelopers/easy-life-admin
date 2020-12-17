@@ -244,7 +244,7 @@ const Content = (props) => {
                                                         <tr key={i}>
                                                             <td>{item.name}</td>
                                                             <td>{item.restaurantId}</td>
-                                                            <td>{item.price}</td>
+                                                            <td>{item.originalPrice}</td>
                                                             <td><div>
                                                                 {item.sizes.map((size, index) => <p>{size.title}, {size.additionalPrice}</p>)}
                                                                 </div></td>

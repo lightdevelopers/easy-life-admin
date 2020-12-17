@@ -134,6 +134,7 @@ const Content = (props) => {
             method: "GET",
             headers: headers
         });
+        console.log(foods);
         const list = await foods.json();
         console.log(list);
         setFoods(list);
@@ -224,8 +225,9 @@ const Content = (props) => {
                                                     <tr>
                                                         <th scope="col">Deal Name</th>
                                                         <th scope="col">Restaurant ID</th>
-                                                        <th scope="col">Price</th>
-                                                        <th scope="col">Discount</th>
+                                                        <th scope="col">Old Price</th>
+                                                        <th scope="col">New Price</th>
+                                                        <th scope="col">Off</th>
                                                         <th scope="col">FoodItems</th>
                                                         <th scope="col">Available</th>
                                                         <th scope="col">Edit</th>
@@ -237,8 +239,9 @@ const Content = (props) => {
                                                         <tr key={i}>
                                                             <td>{item.dealName}</td>
                                                             <td>{item.restaurantId}</td>
-                                                            <td>{item.price.toFixed(2)}</td>
-                                                            <td>{item.discount}</td>
+                                                            <td>{item.oldPrice.toFixed(2)}</td>
+                                                            <td>{item.newPrice.toFixed(2)}</td>
+                                                            <td>{item.percentageOff}</td>
                                                             
                                                             <td><div>
                                                                 {item.foodItemsNames.map((food, index) => <p>{food}</p>)}

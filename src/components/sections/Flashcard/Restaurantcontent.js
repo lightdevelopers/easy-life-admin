@@ -298,11 +298,6 @@ const Content = (props) => {
                                             <table className="table table-hover thead-primary">
                                                 <thead>
                                                     <tr>
-                                                    val id: String,
-    val photoUri: String,
-    val clickable: Boolean,
-    val url: String,
-    val counter: Long
                                                         <th scope="col">Card ID</th>
                                                         <th scope="col">Card URL</th>
                                                         <th scope="col">Card Clickable</th>
