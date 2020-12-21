@@ -73,6 +73,7 @@ import AddDeal from './components/pages/AddDeal';
 import DealList from './components/pages/DealsList'
 import Riders from './components/pages/Riders';
 import FlashCard from './components/pages/FlashCard';
+import Users from './components/pages/Users';
 import firebase from 'firebase';
 function App() {
   firebase.initializeApp({
@@ -92,6 +93,7 @@ function App() {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/flashcard" component={FlashCard} />
         <Route exact path="/riders" component={Riders} />
+        <Route exact path="/users" component={Users} />
         <Route exact path="/addfood" component={AddFood} />
         <Route exact path="/foodlist" component={FoodList} />
         <Route exact path="/adddeal" component={AddDeal} />

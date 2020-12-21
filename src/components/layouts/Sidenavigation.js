@@ -118,7 +118,12 @@ class Sidenavigation extends Component {
                         {/* customers*/}
                         
                         <li className="menu-item">
-                        <Link to="/customer-list"> <span><i className="fas fa-users fs-16" />Users</span>
+                        <Link to="/users"> <span><i className="fas fa-users fs-16" />Users</span>
+                            </Link>
+                        </li >
+
+                        <li className="menu-item">
+                        <Link to="/manage-app"> <span><i className="fas fa-cog fs-16" />Manage App</span>
                             </Link>
                         </li >
                         {/* Customers  end */}
