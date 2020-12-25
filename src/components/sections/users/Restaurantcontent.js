@@ -143,27 +143,27 @@ const Content = (props) => {
         setLoading(false);
     }
 
-    const deleteFoodItem = async (id) => {
+    const changeStatus = async (id,block) => {
         setLoading(true);
-        const response = await fetch(api("/delete_food_item"), {
-            method: "DELETE",
+        const response = await fetch(api("/change_user_block_status"),{
+            method: "POST",
             headers: headers,
-            body: id
+            body: JSON.stringify({
+                userId: id,
+                toBlock: block
+            })
         });
-        console.log(response);
-        setLoading(false);
         if(response.ok) {
             for(let i=0; i<foods.length; i++) {
                 if(foods[i].id == id) {
-                    foods.splice(i,1);
-                    setFoods([...foods]);
+                    foods[i].isBlocked = block;
                     break;
                 }
             }
+            setFoods([...foods]);
         }
+        setLoading(false);
     }
-
-    
 
     useEffect(() => {
         fetchFoods();
@@ -206,12 +206,12 @@ const Content = (props) => {
                                                         <tr key={i}>
                                                             <td>{item.displayName}</td>
                                                             <td>{item.phoneNumber}</td>
-                                                            <td>{item.deliveryAddress}</td>
+                                                            <td>{item.deliveryAddress.knownName}</td>
                                                             <td>{item.wallet}</td>
                                                             <td>{item.numberOfOrders}</td>
                                                             <td>{item.isBlocked ? "Blocked" : "Not Blocked"}</td>
                                                             <td>
-                                                                <Link to=""><i className="fas fa-pencil-alt text-secondary" /></Link>
+                                                                <Link><i onClick={() => changeStatus(item.id, !item.isBlocked)} className="fas fa-pencil-alt text-secondary" /></Link>
                                                             </td>
                                                     
                                                                 </tr>

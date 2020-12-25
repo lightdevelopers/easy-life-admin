@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import Sidenavigation from '../layouts/Sidenavigation';
 import Topnavigation from '../layouts/Topnavigation';
-import Addproductcontent from '../sections/users/Restaurantcontent';
+import Addproductcontent from '../sections/ManageApp/AddFood';
 import Quickbar from '../layouts/Quickbar';
 import api, {headers} from '../../api';
 const Addproduct = (props) => {
