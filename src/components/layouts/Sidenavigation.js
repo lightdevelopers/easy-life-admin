@@ -126,6 +126,12 @@ class Sidenavigation extends Component {
                         <Link to="/manage-app"> <span><i className="fas fa-cog fs-16" />Manage App</span>
                             </Link>
                         </li >
+
+                        
+                        <li className="menu-item">
+                        <Link> <span><i className="fas fa-cog fs-16" />Reports</span>
+                            </Link>
+                        </li >
                         {/* Customers  end */}
                         {/* sales */}
                         
