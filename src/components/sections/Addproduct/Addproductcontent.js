@@ -27,10 +27,7 @@ const Addproductcontent = ({restaurnt}) => {
         if(restaurnt) {
             const response = await fetch(api(`/edit_restaurant`),{
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept-Type": "application/json",
-                },
+                headers: headers,
                 body: JSON.stringify({
                     restaurantId: restaurnt.id,
                     newName: name,
@@ -42,6 +39,7 @@ const Addproductcontent = ({restaurnt}) => {
                     newSharePercentage: share,
                 })
             });
+            console.log(response);
     
             if(response.ok) {
                 setSuccess(true);
@@ -53,12 +51,10 @@ const Addproductcontent = ({restaurnt}) => {
             return;
         }
         setSuccess(false);
+        console.log(headers)
         const response = await fetch(api(`/add_restaurant?password=${password}`),{
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept-Type": "application/json",
-            },
+            headers: headers,
             body: JSON.stringify({
                 id: name.replace(/\s/g, '').toLowerCase(),
                 name: name,
@@ -70,7 +66,7 @@ const Addproductcontent = ({restaurnt}) => {
                 phoneNumber: phone,
                 sharePercentage: share,
                 isClose: isClose,
-                closeReason: reson
+                closeReason: reson,
             })
         });
 
@@ -240,6 +236,7 @@ const Addproductcontent = ({restaurnt}) => {
                                         </div>
                                     </div>
 
+                                   
                                     
                                     
                                     <div className="ms-panel-header new">

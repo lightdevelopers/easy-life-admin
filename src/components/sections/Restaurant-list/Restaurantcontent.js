@@ -134,6 +134,7 @@ const Content = (props) => {
             method: "GET",
             headers: headers,
         });
+        console.log(restaurants)
         const list = await restaurants.json();
         setRestaurants(list);
         setLoading(false);

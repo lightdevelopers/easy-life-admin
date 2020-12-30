@@ -35,6 +35,7 @@ const Addproductcontent = ({food}) => {
     const [deliveryTime, setDeliveryTime] = useState(food ? food.deliveryTime : 0);
     const [opening, setOpening] = useState(food ? food.openingTime : "");
     const [closing, setClosing] = useState(food ? food.closingTime : "");
+    const [sideOrder, setSideOrder] = useState(false);
     const addFood = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -92,7 +93,8 @@ const Addproductcontent = ({food}) => {
                 closingTime: closing,
                 openingTime: opening,
                 rating: 5.0,
-                deliveryTime: deliveryTime
+                deliveryTime: deliveryTime,
+                isSideOrder: sideOrder
             })
         });
 
@@ -376,7 +378,15 @@ const Addproductcontent = ({food}) => {
                                             </label>
                                         </div>
                                     </div>
-
+                                    <div className="ms-panel-header new">
+                                        <p className="medium">Is Side Order</p>
+                                        <div>
+                                            <label className="ms-switch">
+                                                <input checked={sideOrder} onChange={e => setSideOrder(e.target.checked)} type="checkbox" />
+                                                <span className="ms-switch-slider round" />
+                                            </label>
+                                        </div>
+                                    </div>
                                     
                                     
                                     <div className="ms-panel-header new">
