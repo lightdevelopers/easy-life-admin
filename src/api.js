@@ -1,8 +1,8 @@
 export default (path) => {
-    return ("https://cors-anywhere.herokuapp.com/http://ec2-3-20-234-252.us-east-2.compute.amazonaws.com:8088"+path)
+    return ("https://cors-anywhere.herokuapp.com/http://ec2-54-179-226-46.ap-southeast-1.compute.amazonaws.com:8088"+path)
 }
 
-//https://cors-anywhere.herokuapp.com/http://ec2-3-23-63-206.us-east-2.compute.amazonaws.com:8088
+//https://cors-anywhere.herokuapp.com/http://ec2-54-179-226-46.ap-southeast-1.compute.amazonaws.com:8088
 
 export const headers = {
             "Content-Type": "application/json",
