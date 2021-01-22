@@ -141,7 +141,7 @@ const Content = (props) => {
     const [riderPhoto, setRiderPhoto] = useState(editable ? editable.riderPhoto : "");
     const [phoneNumber, setPhoneNumber] = useState(editable ? editable.phoneNumber :  "");
 
-    console.log(foods);
+   console.log(foods)
 
     const fetchFoods = async () => {
         setLoading(true);
@@ -224,7 +224,16 @@ const Content = (props) => {
         }
     }
 
-    
+     useEffect(() => {
+        if(editable != null) {
+            setID(editable.id);
+            setRiderDisplayName(editable.displayName);
+            setRiderPassword(editable.password);
+            setRiderPhoto(editable.riderPhoto);
+            setPhoneNumber(editable.phoneNumber);
+        }
+
+    }, [editable])
 
     useEffect(() => {
         fetchFoods();

@@ -35,7 +35,7 @@ const Addproductcontent = ({food}) => {
     const [deliveryTime, setDeliveryTime] = useState(food ? food.deliveryTime : 0);
     const [opening, setOpening] = useState(food ? food.openingTime : "");
     const [closing, setClosing] = useState(food ? food.closingTime : "");
-    const [sideOrder, setSideOrder] = useState(false);
+    const [sideOrder, setSideOrder] = useState(food ? food.isSideOrder : false);
     const addFood = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -59,7 +59,9 @@ const Addproductcontent = ({food}) => {
                     newCategory: category,
                     isAvailable: available ,
                     newClosingTime: closing,
-                    newOpeningTime: opening
+                    newOpeningTime: opening,
+                    newDeliveryTime: deliveryTime,
+                    isSideOrder: sideOrder
                 })
             });
     
