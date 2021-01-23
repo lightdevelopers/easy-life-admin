@@ -228,8 +228,7 @@ const Content = (props) => {
         if(editable != null) {
             setID(editable.id);
             setRiderDisplayName(editable.displayName);
-            setRiderPassword(editable.password);
-            setRiderPhoto(editable.riderPhoto);
+            setRiderPhoto(editable.imageURI);
             setPhoneNumber(editable.phoneNumber);
         }
 

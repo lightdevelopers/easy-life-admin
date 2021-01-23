@@ -149,7 +149,9 @@ const Content = (props) => {
 
     const fetchFoods = async () => {
         setLoading(true);
-        
+        const response = await fetch(api("/get_flash_cards"));
+        const items = await response.json();
+        setFoods(items);
         setLoading(false);
     }
 
@@ -176,10 +178,9 @@ const Content = (props) => {
 
     const deleteFoodItem = async (id) => {
         setLoading(true);
-        const response = await fetch(api("/delete_flash_card"), {
+        const response = await fetch(api(`/delete_flash_card?cardId=${id}`), {
             method: "DELETE",
             headers: headers,
-            body: id
         });
         setLoading(false);
         if(response.ok) {
@@ -209,14 +210,14 @@ const Content = (props) => {
                         <div className="row">
                         <div className="col-xl-12 col-md-12">
                         {success && <div className="alert alert-success" role="alert">
-                            <strong>Well done!</strong> Rider created succesfully
+                            <strong>Well done!</strong> Flash Card created succesfully
       </div>}
       </div>
                     </div>
                     <div className="col-xl-12 col-md-12">
                         <div className="ms-panel ms-panel-fh">
                             <div className="ms-panel-header">
-                                <h6>Rider Form</h6>
+                                <h6>Flash Card Form</h6>
                             </div>
                             <div className="ms-panel-body">
                                 <form className="needs-validation clearfix" noValidate>

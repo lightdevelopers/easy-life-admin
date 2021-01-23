@@ -1,12 +1,66 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import api, {headers} from '../../../api';
+const Ordertable  = () => {
+    const [orders, setOrders] = useState(null);
+    const [filtered, setFiltered] = useState([]);
+    const fetchOrder = async() => {
+        let myOrders = [];
+        const response1 = await fetch(api("/get_all_completed_orders"));
+        console.log(response1);
+        const completed = await response1.json();
+        for(let i=0; i<completed.length; i++) {
+            completed[i].type = "Completed";
+        }
+        console.log(completed);
+        myOrders = [...myOrders, ...completed];
+        const response2 = await fetch(api("/get_all_pending_orders"));
+        const pending = await response2.json();
+        for(let i=0; i<pending.length; i++) {
+            pending[i].type = "Pending";
+        }
+        myOrders = [...myOrders, ...pending];
+        const response3 = await fetch(api("/get_all_cancelled_orders"));
+        const cancelled = await response3.json();
+        for(let i=0; i<cancelled.length; i++) {
+            cancelled[i].type = "Cancelled";
+        }
+        myOrders = [...myOrders, ...cancelled];
+        const response4 = await fetch(api("/get_all_on_going_orders"));
+        const onGoing = await response4.json();
+        for(let i=0; i<onGoing.length; i++) {
+            onGoing[i].type = "onGoing";
+        }
+        myOrders = [...myOrders, ...onGoing];
 
-class Ordertable extends Component {
-    render() {
+        setOrders([...myOrders])
+    }
+
+    useEffect(() => {
+        fetchOrder();
+    }, [])
+
+    useEffect(() => {
+        if(orders != null)
+        setFiltered([...filtered, ...orders]);
+    }, [orders])
         return (
             <div className="col-12">
                 <div className="ms-panel">
                     <div className="ms-panel-header">
                         <h6> Order List</h6>
+                        <select style={{marginTop: 10}} onChange={e => {
+                            if(orders == null)
+                                return;
+                            const selected = e.target.options[e.target.selectedIndex].value;
+                            const items = orders.filter(order => order.type == selected);
+                            setFiltered([...items]);
+                        }}>
+                            <option value="Filter">Filter</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="onGoing">On Going</option>
+                        </select>
                     </div>
                     <div className="ms-panel-body">
                         <div className="table-responsive">
@@ -14,105 +68,30 @@ class Ordertable extends Component {
                                 <thead>
                                     <tr>
                                         <th scope="col">Order ID</th>
-                                        <th scope="col">Order Name</th>
-                                        <th scope="col">Customer Name</th>
-                                        <th scope="col">Location</th>
-                                        <th scope="col">Order Status</th>
-                                        <th scope="col">Delivered Time</th>
-                                        <th scope="col">Price</th>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">Phone Number</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">items Bill</th>
+                                        <th scope="col">order Notes</th>
+                                        <th scope="col">Order Items</th>
+                                        <th scope="col">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>French Fries</td>
-                                        <td> Jhon Leo</td>
-                                        <td> New Town</td>
-                                        <td><span className="badge badge-primary">Pending</span></td>
-                                        <td>10:05</td>
-                                        <td>$10</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Mango Pie</td>
-                                        <td>Kristien</td>
-                                        <td> Old Town</td>
-                                        <td><span className="badge badge-dark">Cancelled</span></td>
-                                        <td>14:05</td>
-                                        <td>$9</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>FrieD Egg Sandwich</td>
-                                        <td>Jack Suit</td>
-                                        <td> Oxford Street</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$19</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>Lemon Yogurt Parfait</td>
-                                        <td>Alesdro Guitto</td>
-                                        <td> Church hill</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$18</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">5</th>
-                                        <td>Spicy Grill Sandwich</td>
-                                        <td>Jacob Sahwny</td>
-                                        <td> palace Road</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$21</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">6</th>
-                                        <td>Chicken Sandwich</td>
-                                        <td>Peter Gill</td>
-                                        <td> Street 21</td>
-                                        <td><span className="badge badge-primary">Pending</span></td>
-                                        <td>12:05</td>
-                                        <td>$15</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">7</th>
-                                        <td> Sandwich</td>
-                                        <td>Jack Suit</td>
-                                        <td> 40, Street</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>11:05</td>
-                                        <td>$19</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">8</th>
-                                        <td>Spaghetti</td>
-                                        <td>Jack Suit</td>
-                                        <td> Oxford Street</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$19</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">9</th>
-                                        <td>Fried Rice</td>
-                                        <td>Jack Suit</td>
-                                        <td> Hilltown Street</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$19</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">10</th>
-                                        <td>Noodels</td>
-                                        <td>Jack Suit</td>
-                                        <td> Oxford Street</td>
-                                        <td><span className="badge badge-success">Delivered</span></td>
-                                        <td>12:05</td>
-                                        <td>$19</td>
-                                    </tr>
+                                    {filtered && filtered.map((order, index) => {
+                                        return (
+                                            <tr>
+                                                <th scope="row">{order.orderId}</th>
+                                                <td>{order.userId}</td>
+                                                <td>{order.phoneNumber}</td>
+                                                <td>{order.deliveryAddress.address}</td>
+                                                <td>{order.itemsBill}</td>
+                                                <td>{order.orderNotes}</td>
+                                                <td>{order.orderItems.map(item => <p>{item.itemName, item.price} (x{item.count})</p>)}</td>
+                                                <td><span className={order.type == "Completed" ? "badge badge-success" : order.type == "Pending" ? "badge badge-warning" : "badge badge-danger"}>{order.type}</span></td>
+                                             </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                         </div>
@@ -120,7 +99,6 @@ class Ordertable extends Component {
                 </div>
             </div>
         );
-    }
 }
 
 export default Ordertable;
