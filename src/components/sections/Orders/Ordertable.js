@@ -3,6 +3,8 @@ import api, {headers} from '../../../api';
 const Ordertable  = () => {
     const [orders, setOrders] = useState(null);
     const [filtered, setFiltered] = useState([]);
+
+    console.log(filtered);
     const fetchOrder = async() => {
         let myOrders = [];
         const response1 = await fetch(api("/get_all_completed_orders"));
@@ -68,7 +70,6 @@ const Ordertable  = () => {
                                 <thead>
                                     <tr>
                                         <th scope="col">Order ID</th>
-                                        <th scope="col">User ID</th>
                                         <th scope="col">Phone Number</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">items Bill</th>
@@ -82,12 +83,11 @@ const Ordertable  = () => {
                                         return (
                                             <tr>
                                                 <th scope="row">{order.orderId}</th>
-                                                <td>{order.userId}</td>
                                                 <td>{order.phoneNumber}</td>
-                                                <td>{order.deliveryAddress.address}</td>
+                                                <td>{order.deliveryAddress.address} {order.deliveryAddress.knownName}</td>
                                                 <td>{order.itemsBill}</td>
                                                 <td>{order.orderNotes}</td>
-                                                <td>{order.orderItems.map(item => <p>{item.itemName, item.price} (x{item.count})</p>)}</td>
+                                                <td>{order.orderItems.map(item => <p>{item.itemName} (x{item.count})</p>)}</td>
                                                 <td><span className={order.type == "Completed" ? "badge badge-success" : order.type == "Pending" ? "badge badge-warning" : "badge badge-danger"}>{order.type}</span></td>
                                              </tr>
                                         )
